@@ -46,6 +46,8 @@
 
         .cart-badge { position: absolute; top: -4px; right: -6px; background-color: #4A3525; color: white; font-size: 9px; font-weight: 900; height: 16px; width: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; opacity: 0; transform: scale(0); transition: all 0.3s ease; }
         .cart-badge.visible { opacity: 1; transform: scale(1); }
+        .cart-pulse { animation: cartPop 0.4s; }
+        @keyframes cartPop { 0% { transform: scale(1); } 50% { transform: scale(1.4); } 100% { transform: scale(1); } }
 
         .melon-card { position: relative; border-radius: 12px; padding: 12px 16px; height: 110px; display: flex; flex-direction: column; justify-content: center; overflow: visible; cursor: pointer; border: 1px solid rgba(255,255,255,0.2); margin-bottom: 8px; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease; }
         .melon-card.bg-bags { background: linear-gradient(135deg, #A67B5B, #6B4423); }
@@ -53,13 +55,16 @@
         .melon-card.bg-classic { background: linear-gradient(135deg, #D2B48C, #A67B5B); }
         
         .melon-icon-pop { position: absolute; right: 5%; top: 50%; transform: translateY(-50%); font-size: 5rem; color: rgba(255,255,255,0.4); z-index: 10; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), right 0.4s ease; pointer-events: none;}
-        
+        .melon-img { position: absolute; right: 2%; top: 50%; transform: translateY(-50%); height: 150%; object-fit: contain; z-index: 10; pointer-events: none; filter: drop-shadow(-10px 15px 15px rgba(74, 53, 37, 0.4)); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), right 0.4s ease; }
+
         @media (min-width: 768px) {
             .melon-card { border-radius: 16px; height: 160px; margin-bottom: 0; padding: 24px; }
             .melon-icon-pop { font-size: 7rem; right: 8%; }
             .melon-card:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 15px 30px rgba(74, 53, 37, 0.2); z-index: 20; }
             .melon-card:hover .melon-icon-pop { transform: translateY(-50%) scale(1.15) rotate(-5deg); right: 2%; color: rgba(255,255,255,0.6); }
+            .melon-card:hover .melon-img { transform: translateY(-50%) scale(1.15) rotate(-3deg); right: -2%; }
         }
+        .melon-force-hover { transform: translateY(-4px) scale(1.02) !important; box-shadow: 0 10px 20px rgba(74, 53, 37, 0.2) !important; z-index: 20; }
 
         .cat-pill { white-space: nowrap; padding: 6px 14px; border-radius: 4px; font-size: 10px; font-weight: 700; border: 1px solid rgba(74, 53, 37, 0.1); color: #4A3525; transition: all 0.2s; cursor: pointer; background: transparent; text-transform: uppercase; letter-spacing: 1px; }
         .cat-active { background: #4A3525; color: white; border-color: #4A3525; box-shadow: 0 4px 10px rgba(74, 53, 37, 0.2); }
@@ -85,6 +90,13 @@
         
         .rounded-xl { border-radius: 4px !important; }
         .rounded-2xl, .rounded-[2rem] { border-radius: 8px !important; }
+
+        /* Custom Color Swatch Styling */
+        .color-swatch { width: 28px; height: 28px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: all 0.2s ease; outline: 2px solid transparent; outline-offset: 2px; }
+        .color-swatch.active { border-color: white; outline-color: #4A3525; transform: scale(1.1); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+
+        /* VINES Feature: The Secret Orange Outline */
+        .vines { border: 1.5px solid #f97316 !important; }
     </style>
 </head>
 <body>
@@ -175,8 +187,9 @@
                             <h3 class="text-xl md:text-3xl font-display font-bold text-white mb-2">Handbags</h3>
                             <span class="text-[9px] md:text-[11px] font-medium text-white/80 group-hover:text-white transition flex items-center gap-1 uppercase tracking-widest">Explore <i class="fas fa-long-arrow-alt-right"></i></span>
                         </div>
-                        <i class="fas fa-shopping-bag melon-icon-pop"></i>
+                        <img src="images/HBhm.png" alt="Handbags" class="melon-img">
                     </div>
+                    
                     <div onclick="handleMelonTap('Backpack', this)" class="melon-card bg-backpacks tilt-card group">
                         <div class="relative z-10 w-[65%] md:w-2/3">
                             <h3 class="text-xl md:text-3xl font-display font-bold text-white mb-2">Backpacks</h3>
@@ -184,6 +197,7 @@
                         </div>
                         <i class="fas fa-briefcase melon-icon-pop"></i>
                     </div>
+                    
                     <div onclick="handleMelonTap('all', this)" class="melon-card bg-classic tilt-card group">
                         <div class="relative z-10 w-[65%] md:w-2/3">
                             <h3 class="text-xl md:text-3xl font-display font-bold text-white mb-2">The Full<br>Collection</h3>
@@ -212,7 +226,7 @@
                     <div class="wc-brand-footer pt-8 border-t border-brand-light">
                         <a href="https://www.whats-cart.com/" target="_blank" class="flex flex-row items-center justify-center gap-2 transition-opacity hover:opacity-100 opacity-60 group">
                             <span class="wc-brand-text m-0 group-hover:text-slate-800 transition-colors">POWERED BY</span>
-                            <div class="wc-brand-icon group-hover:scale-110 transition-transform"><i class="fas fa-shopping-cart"></i></div>
+                            <div class="wc-brand-icon group-hover:scale-110 transition-transform"><i class="fas fa-shopping-cart text-white"></i></div>
                         </a>
                     </div>
                 </div>
@@ -266,9 +280,9 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 flex-1">
                     
                     <div class="flex flex-col gap-4">
-                        <div id="main-image-container" class="flex justify-center items-center aspect-square w-full relative bg-white p-0 overflow-hidden shadow-sm border border-brand-light group">
+                        <div id="main-image-container" class="flex justify-center items-center aspect-square w-full relative bg-white p-0 overflow-hidden shadow-sm border border-brand-light group vines">
                             
-                            <i id="detail-icon" class="fas fa-shopping-bag text-6xl md:text-8xl text-brand-light transition-transform duration-500 hidden"></i>
+                            <i id="detail-icon" class="fas fa-shopping-cart text-6xl md:text-8xl text-brand-light transition-transform duration-500 hidden"></i>
                             <img id="detail-main-img" class="hidden w-full h-full object-cover fade-img opacity-100">
                             
                             <button id="slide-left" onclick="changeSlide(-1)" class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 backdrop-blur shadow border border-brand-light flex items-center justify-center text-brand-dark hover:bg-brand-dark hover:text-white transition-colors hidden z-10">
@@ -294,6 +308,12 @@
                             <div id="price-tag" class="text-xl md:text-2xl font-sans font-light text-slate-800 tracking-wide"></div>
                         </div>
 
+                        <div id="color-selection-container" class="mb-6 hidden">
+                            <span class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-3 block">Color Selected: <span id="selected-color-name" class="text-brand-dark"></span></span>
+                            <div id="color-options" class="flex gap-3">
+                                </div>
+                        </div>
+
                         <div class="w-8 h-[1px] bg-brand mb-6"></div>
 
                         <p id="product-description" class="text-xs md:text-sm text-slate-600 leading-loose mb-8 font-light">Crafted with precision and designed for elegance. A quintessential piece for the modern wardrobe, embodying both utility and timeless style.</p>
@@ -312,14 +332,26 @@
     <script>
         // HARDCODED PRODUCTS FOR OVRLYNE KENYA
         const products = [
-            { id: 1, name: 'Ovrlyne Classic Handbag', price: 4500, type: 'Handbag', icon: 'fa-shopping-bag', image_url: null, images: [] },
-            { id: 2, name: 'Heritage Leather Backpack', price: 5500, type: 'Backpack', icon: 'fa-briefcase', image_url: null, images: [] },
-            { id: 3, name: 'Signature Crossbody', price: 3500, type: 'Handbag', icon: 'fa-shopping-bag', image_url: null, images: [] },
-            { id: 4, name: 'Urban Canvas Backpack', price: 4000, type: 'Backpack', icon: 'fa-briefcase', image_url: null, images: [] }
+            { 
+                id: 1, 
+                name: 'CW TOTE', 
+                price: 2200, 
+                type: 'Handbag', 
+                icon: 'fa-shopping-cart', 
+                image_url: 'images/HBB.jpg', 
+                colors: [
+                    { name: 'Brown', hex: '#6B4423', img: 'images/HBB.jpg' },
+                    { name: 'Light Brown', hex: '#A67B5B', img: 'images/HBLB.jpg' },
+                    { name: 'Grey', hex: '#808080', img: 'images/HBGREY.jpg' }
+                ]
+            },
+            { id: 2, name: 'Heritage Leather Backpack', price: 5500, type: 'Backpack', icon: 'fa-briefcase', image_url: null },
+            { id: 3, name: 'Signature Crossbody', price: 3500, type: 'Handbag', icon: 'fa-shopping-cart', image_url: null },
+            { id: 4, name: 'Urban Canvas Backpack', price: 4000, type: 'Backpack', icon: 'fa-briefcase', image_url: null }
         ];
 
         let activeCategoryFilter = 'all';
-        let currentSelection = { product: null };
+        let currentSelection = { product: null, color: null }; 
         let currentSlideIndex = 0;
         let cart = JSON.parse(localStorage.getItem('ovrlyne_cart')) || []; 
 
@@ -341,16 +373,12 @@
                     const rect = card.getBoundingClientRect();
                     const x = e.clientX - rect.left;
                     const y = e.clientY - rect.top;
-
                     const centerX = rect.width / 2;
                     const centerY = rect.height / 2;
-                    
                     const rotateX = ((y - centerY) / centerY) * -12; 
                     const rotateY = ((x - centerX) / centerX) * 12;
-
                     card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
                 });
-
                 card.addEventListener('mouseleave', () => {
                     card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
                 });
@@ -370,11 +398,7 @@
 
             if (!isCartOpen) {
                 overlay.classList.remove('hidden');
-                setTimeout(() => {
-                    overlay.classList.remove('opacity-0');
-                    overlay.classList.add('opacity-100');
-                    cartPanel.classList.remove('translate-x-full');
-                }, 10);
+                setTimeout(() => { overlay.classList.remove('opacity-0'); overlay.classList.add('opacity-100'); cartPanel.classList.remove('translate-x-full'); }, 10);
                 document.body.style.overflow = 'hidden';
                 isCartOpen = true;
             } else {
@@ -405,11 +429,7 @@
 
         function handleMelonTap(cat, element) {
             element.classList.add('melon-force-hover');
-            setTimeout(() => {
-                element.classList.remove('melon-force-hover');
-                setFilter(cat);
-                showPage('catalog');
-            }, 300);
+            setTimeout(() => { element.classList.remove('melon-force-hover'); setFilter(cat); showPage('catalog'); }, 300);
         }
 
         function setFilter(cat, btnElement = null) {
@@ -431,15 +451,16 @@
 
             filtered.forEach((p, index) => { 
                 let displayImg = p.image_url;
-                if (p.images && p.images.length > 0) displayImg = p.images[0];
+                if (p.colors && p.colors.length > 0) displayImg = p.colors[0].img;
 
                 let imageHTML = displayImg 
                     ? `<img src="${displayImg}" class="w-full h-full object-cover">`
                     : `<i class="fas ${p.icon} text-3xl md:text-5xl text-brand/40 transition-transform duration-500 group-hover:scale-110 group-hover:text-brand"></i>`;
 
+                // Applied "vines" feature class to the image container
                 container.innerHTML += `
                     <div class="food-card flex flex-col items-center text-center cursor-pointer relative group" onclick="selectProduct(${index})">
-                        <div class="w-full aspect-square mt-1 mb-3 overflow-hidden border border-brand-light bg-white p-0 flex items-center justify-center transition-all duration-300 group-hover:border-brand/40 shadow-sm relative">
+                        <div class="w-full aspect-square mt-1 mb-3 overflow-hidden bg-white p-0 flex items-center justify-center transition-all duration-300 shadow-sm relative vines">
                             ${imageHTML}
                         </div>
                         <p class="text-[8px] md:text-[9px] font-bold text-brand uppercase tracking-[0.2em] mb-1">${p.type}</p>
@@ -460,10 +481,11 @@
             }); 
         }
 
+        // --- PRODUCT DETAILS LOGIC (WITH COLOR SELECTORS) ---
         function selectProduct(index) {
             const p = products[index];
             currentSelection.product = p;
-            currentSlideIndex = 0; 
+            currentSelection.color = null; 
             
             document.getElementById('product-title').innerText = p.name;
             document.getElementById('detail-category').innerText = p.type;
@@ -471,98 +493,98 @@
             
             const iconI = document.getElementById('detail-icon');
             const mainImg = document.getElementById('detail-main-img');
-            const btnLeft = document.getElementById('slide-left');
-            const btnRight = document.getElementById('slide-right');
-            const dotsContainer = document.getElementById('slide-dots');
+            const colorContainer = document.getElementById('color-selection-container');
+            const colorOptionsDiv = document.getElementById('color-options');
             
-            if (p.images && p.images.length > 0) {
+            if (p.colors && p.colors.length > 0) {
                 iconI.classList.add('hidden');
                 mainImg.classList.remove('hidden');
+                colorContainer.classList.remove('hidden');
                 
-                if (p.images.length > 1) {
-                    btnLeft.classList.remove('hidden');
-                    btnRight.classList.remove('hidden');
-                    dotsContainer.classList.remove('hidden');
-                    renderSlideshow();
-                } else {
-                    btnLeft.classList.add('hidden');
-                    btnRight.classList.add('hidden');
-                    dotsContainer.classList.add('hidden');
-                    mainImg.src = p.images[0];
-                    mainImg.style.opacity = 1;
-                }
-            } else if (p.image_url) {
-                iconI.classList.add('hidden');
-                mainImg.classList.remove('hidden');
-                mainImg.src = p.image_url;
-                mainImg.style.opacity = 1;
-                btnLeft.classList.add('hidden');
-                btnRight.classList.add('hidden');
-                dotsContainer.classList.add('hidden');
+                colorOptionsDiv.innerHTML = p.colors.map((color, i) => `
+                    <button id="color-btn-${i}" onclick="selectColor(${i})" class="color-swatch" style="background-color: ${color.hex};"></button>
+                `).join('');
+                
+                selectColor(0);
+                
             } else {
-                mainImg.classList.add('hidden');
-                iconI.classList.remove('hidden');
-                iconI.className = `fas ${p.icon} text-6xl md:text-8xl text-brand-light transition-transform duration-500`;
-                btnLeft.classList.add('hidden');
-                btnRight.classList.add('hidden');
-                dotsContainer.classList.add('hidden');
+                colorContainer.classList.add('hidden');
+                if (p.image_url) {
+                    iconI.classList.add('hidden');
+                    mainImg.classList.remove('hidden');
+                    mainImg.src = p.image_url;
+                    mainImg.style.opacity = 1;
+                } else {
+                    mainImg.classList.add('hidden');
+                    iconI.classList.remove('hidden');
+                    iconI.className = `fas ${p.icon} text-6xl md:text-8xl text-brand-light transition-transform duration-500`;
+                }
             }
 
             showPage('product-detail-view');
         }
 
-        function renderSlideshow() {
+        function selectColor(colorIndex) {
             const p = currentSelection.product;
-            if (!p || !p.images) return;
-            
+            const selectedColor = p.colors[colorIndex];
+            currentSelection.color = selectedColor;
+
+            document.getElementById('selected-color-name').innerText = selectedColor.name;
+
+            p.colors.forEach((_, i) => {
+                document.getElementById(`color-btn-${i}`).classList.remove('active');
+            });
+            document.getElementById(`color-btn-${colorIndex}`).classList.add('active');
+
             const mainImg = document.getElementById('detail-main-img');
-            const dotsContainer = document.getElementById('slide-dots');
-            
             mainImg.style.opacity = 0.5;
             setTimeout(() => {
-                mainImg.src = p.images[currentSlideIndex];
+                mainImg.src = selectedColor.img;
                 mainImg.style.opacity = 1;
             }, 150);
-
-            dotsContainer.innerHTML = p.images.map((img, i) => `
-                <button onclick="goToSlide(${i})" class="w-1.5 h-1.5 rounded-none transition-all duration-300 ${i === currentSlideIndex ? 'bg-brand-dark w-4' : 'bg-brand/30 hover:bg-brand/60'}"></button>
-            `).join('');
-        }
-
-        function changeSlide(direction) {
-            const p = currentSelection.product;
-            if (!p || !p.images) return;
-            
-            currentSlideIndex += direction;
-            if (currentSlideIndex >= p.images.length) currentSlideIndex = 0;
-            if (currentSlideIndex < 0) currentSlideIndex = p.images.length - 1;
-            renderSlideshow();
-        }
-
-        function goToSlide(index) {
-            currentSlideIndex = index;
-            renderSlideshow();
         }
 
         function addCurrentSelectionToCart() {
             if(currentSelection.product) {
-                quickAddToCart(currentSelection.product.id);
+                quickAddToCart(currentSelection.product.id, currentSelection.color);
             }
         }
 
-        function quickAddToCart(id) {
+        function quickAddToCart(id, specificColor = null) {
             const prod = products.find(p => p.id === id);
-            let cartImgUrl = prod.image_url;
-            if (prod.images && prod.images.length > 0) cartImgUrl = prod.images[0];
+            
+            let chosenColor = specificColor;
+            if (!chosenColor && prod.colors && prod.colors.length > 0) {
+                chosenColor = prod.colors[0];
+            }
 
-            const item = { cartId: Date.now(), id: prod.id, name: prod.name, icon: prod.icon, image_url: cartImgUrl, price: prod.price, qty: 1 }; 
-            const existing = cart.find(i => i.id === item.id);
-            if(existing) { existing.qty += 1; } else { cart.push(item); }
+            let cartImgUrl = chosenColor ? chosenColor.img : prod.image_url;
+            let cartColorName = chosenColor ? chosenColor.name : null;
+
+            const cartItemId = cartColorName ? `${prod.id}-${cartColorName}` : prod.id;
+
+            const item = { 
+                cartId: cartItemId, 
+                originalId: prod.id,
+                name: prod.name, 
+                color: cartColorName,
+                icon: prod.icon, 
+                image_url: cartImgUrl, 
+                price: prod.price, 
+                qty: 1 
+            }; 
+            
+            const existing = cart.find(i => i.cartId === item.cartId);
+            if(existing) { 
+                existing.qty += 1; 
+            } else { 
+                cart.push(item); 
+            }
+            
             localStorage.setItem('ovrlyne_cart', JSON.stringify(cart)); 
             updateCartUI(); 
             
             showToast(`Added to Cart`); 
-            
             const cartIcons = document.querySelectorAll('.cart-badge'); 
             cartIcons.forEach(icon => {
                 icon.classList.remove('cart-pulse'); 
@@ -608,23 +630,25 @@
                         ? `<img src="${item.image_url}" class="w-full h-full object-cover">`
                         : `<i class="fas ${item.icon} text-xl text-brand/40"></i>`;
 
+                    const colorLabel = item.color ? `<span class="text-brand ml-1">(${item.color})</span>` : '';
+
                     container.innerHTML += `
                     <div class="bg-white p-3 md:p-4 border border-brand-light flex items-center justify-between shadow-sm">
                         <div class="flex items-center gap-4 w-full pr-4">
-                            <div class="w-12 h-12 overflow-hidden bg-brand-light/30 flex items-center justify-center shrink-0 border border-brand-light">
+                            <div class="w-12 h-12 overflow-hidden bg-brand-light/30 flex items-center justify-center shrink-0 vines">
                                 ${imgThumb}
                             </div>
                             <div class="flex-1">
-                                <h4 class="font-display font-bold text-[11px] md:text-[13px] text-brand-dark mb-1">${item.name}</h4>
+                                <h4 class="font-display font-bold text-[11px] md:text-[13px] text-brand-dark mb-1">${item.name} ${colorLabel}</h4>
                                 <p class="text-[10px] font-light text-slate-600 mb-2 tracking-wide">KSH ${(item.price * item.qty).toLocaleString()}</p>
                                 <div class="flex items-center gap-2 bg-beige-50 w-fit px-2 py-1 border border-brand-light">
-                                    <button onclick="updateCartQty(${item.cartId}, -1)" class="w-4 h-4 text-brand-dark/60 hover:text-brand-dark flex items-center justify-center"><i class="fas fa-minus text-[8px]"></i></button>
+                                    <button onclick="updateCartQty('${item.cartId}', -1)" class="w-4 h-4 text-brand-dark/60 hover:text-brand-dark flex items-center justify-center"><i class="fas fa-minus text-[8px]"></i></button>
                                     <span class="text-[10px] font-bold w-4 text-center text-brand-dark">${item.qty}</span>
-                                    <button onclick="updateCartQty(${item.cartId}, 1)" class="w-4 h-4 text-brand-dark/60 hover:text-brand-dark flex items-center justify-center"><i class="fas fa-plus text-[8px]"></i></button>
+                                    <button onclick="updateCartQty('${item.cartId}', 1)" class="w-4 h-4 text-brand-dark/60 hover:text-brand-dark flex items-center justify-center"><i class="fas fa-plus text-[8px]"></i></button>
                                 </div>
                             </div>
                         </div>
-                        <button onclick="removeFromCart(${item.cartId})" class="w-8 h-8 flex items-center justify-center text-brand-dark/30 hover:bg-brand-light hover:text-brand-dark transition-colors"><i class="fas fa-times text-xs"></i></button>
+                        <button onclick="removeFromCart('${item.cartId}')" class="w-8 h-8 flex items-center justify-center text-brand-dark/30 hover:bg-brand-light hover:text-brand-dark transition-colors"><i class="fas fa-times text-xs"></i></button>
                     </div>`; 
                 }); 
             } 
@@ -634,7 +658,11 @@
         function checkoutCart() { 
             if(cart.length === 0) return showToast("Cart is empty!"); 
             let totalKsh = 0; let msg = '✨ *NEW OVRLYNE ORDER*\n\n'; 
-            cart.forEach(item => { totalKsh += (item.price * item.qty); msg += `📌 ${item.qty}x ${item.name} (KSH ${(item.price * item.qty).toLocaleString()})\n`; }); 
+            cart.forEach(item => { 
+                totalKsh += (item.price * item.qty); 
+                const colorText = item.color ? ` (Color: ${item.color})` : '';
+                msg += `📌 ${item.qty}x ${item.name}${colorText} = KSH ${(item.price * item.qty).toLocaleString()}\n`; 
+            }); 
             msg += `\n💰 *TOTAL: KSH ${totalKsh.toLocaleString()}*\n`;
             
             window.open('https://wa.me/254795896980?text=' + encodeURIComponent(msg), '_blank'); 
