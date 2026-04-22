@@ -48,6 +48,9 @@
         .page.active { display: flex; opacity: 1; animation: fadeIn 0.4s ease forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+        .split-bg { clip-path: polygon(0 0, 100% 0, 100% 85%, 0% 100%); }
+        @media (min-width: 768px) { .split-bg { clip-path: polygon(0 0, 100% 0, 65% 100%, 0% 100%); } }
+
         .cart-badge { position: absolute; top: -4px; right: -6px; background-color: #4A3525; color: white; font-size: 9px; font-weight: 900; height: 16px; width: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; opacity: 0; transform: scale(0); transition: all 0.3s ease; }
         .cart-badge.visible { opacity: 1; transform: scale(1); }
         .cart-pulse { animation: cartPop 0.4s; }
@@ -79,6 +82,30 @@
         .color-swatch.active { border-color: white; outline-color: #4A3525; transform: scale(1.1); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
         .vines { border: 1.5px solid #f97316 !important; }
+
+        /* UNIVERSAL BACK BUTTON STYLE */
+        .back-icon-btn {
+            width: 34px; 
+            height: 34px;
+            background-color: #8C6239; 
+            color: #FAF9F6;
+            border-radius: 50%;
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(140, 98, 57, 0.3);
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+            cursor: pointer;
+            border: none;
+            z-index: 50;
+        }
+        .back-icon-btn:hover { background-color: #4A3525; transform: scale(1.05); }
+        .back-icon-btn i { font-size: 12px; padding-right: 2px; }
+        @media (min-width: 768px) {
+            .back-icon-btn { width: 38px; height: 38px; }
+            .back-icon-btn i { font-size: 14px; }
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -107,26 +134,24 @@
             <div id="cart-items-container" class="p-4 md:p-6 flex flex-col gap-3">
                 </div>
             
-            <div id="cart-total-section" class="px-4 md:px-6 pb-6 hidden flex-col">
+            <div id="cart-total-section" class="px-4 md:px-6 pb-6 hidden flex-col gap-4">
                 <div class="flex justify-between items-center border-t border-brand-light pt-4 mt-2">
                     <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Estimated Total</span>
                     <span id="cart-total" class="text-xl md:text-2xl font-display font-bold text-brand-dark leading-none">KSH 0</span>
                 </div>
+                
+                <button onclick="checkoutCart()" class="w-full bg-[#25D366] text-white py-3.5 md:py-4 rounded-sm font-bold tracking-[0.15em] uppercase hover:bg-[#20bd5a] transition-all active:scale-95 shadow-md shadow-green-500/20 flex justify-center items-center gap-2 text-xs md:text-sm">
+                    <i class="fab fa-whatsapp text-lg"></i> Checkout via WhatsApp
+                </button>
+                <p class="text-[8px] text-slate-400 text-center tracking-widest uppercase flex items-center justify-center gap-1.5"><i class="fas fa-lock"></i> Secure Guest Checkout</p>
             </div>
         </div>
 
-        <div class="p-4 md:p-6 border-t border-brand-light bg-white shrink-0 shadow-[0_-4px_20px_rgba(74,53,37,0.03)] z-20 flex flex-col">
-            <button onclick="checkoutCart()" class="w-full bg-[#25D366] text-white py-3.5 md:py-4 rounded-sm font-bold tracking-[0.15em] uppercase hover:bg-[#20bd5a] transition-all active:scale-95 shadow-md shadow-green-500/20 flex justify-center items-center gap-2 text-xs md:text-sm">
-                <i class="fab fa-whatsapp text-lg"></i> Checkout
-            </button>
-            <p class="text-[8px] text-slate-400 text-center mt-3 tracking-widest uppercase flex items-center justify-center gap-1.5"><i class="fas fa-lock"></i> Guest Checkout via WhatsApp</p>
-            
-            <div class="flex flex-row items-center justify-center gap-1.5 pt-4 mt-3 border-t border-brand-light/30 opacity-60 hover:opacity-100 transition-opacity">
-                <a href="https://www.whats-cart.com/" target="_blank" class="flex items-center gap-1.5 group cursor-pointer">
-                    <span class="font-sans text-[8px] text-brand-dark uppercase tracking-widest font-bold m-0 group-hover:text-black transition-colors">POWERED BY</span>
-                    <div class="w-5 h-5 bg-gradient-to-br from-[#4A3525] to-[#1A1412] border-radius-sm flex items-center justify-center rounded-[3px] shadow-sm group-hover:scale-110 transition-transform"><i class="fas fa-shopping-cart text-white text-[8px]"></i></div>
-                </a>
-            </div>
+        <div class="p-4 border-t border-brand-light bg-white shrink-0 z-20 flex justify-center">
+            <a href="https://www.whats-cart.com/" target="_blank" class="flex items-center gap-1.5 group cursor-pointer opacity-60 hover:opacity-100 transition-opacity">
+                <span class="font-sans text-[8px] text-brand-dark uppercase tracking-widest font-bold m-0 group-hover:text-black transition-colors">POWERED BY</span>
+                <div class="w-5 h-5 bg-gradient-to-br from-[#4A3525] to-[#1A1412] border-radius-sm flex items-center justify-center rounded-[3px] shadow-sm group-hover:scale-110 transition-transform"><i class="fas fa-shopping-cart text-white text-[8px]"></i></div>
+            </a>
         </div>
     </div>
 
@@ -178,6 +203,10 @@
         </section>
         
         <section id="home" class="page bg-camel flex-1 flex flex-col relative overflow-hidden" style="display: none; padding-top: 0;">
+            <button onclick="showPage('welcome')" class="back-icon-btn absolute top-6 left-6 md:top-8 md:left-10 z-50" aria-label="Go Back">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+
             <div class="max-w-7xl mx-auto w-full flex-1 flex flex-col md:flex-row items-center justify-center relative z-10 px-6 md:px-12 pt-[80px] md:pt-[100px] pb-16 min-h-screen">
                 
                 <div class="w-full md:w-1/2 flex flex-col items-center md:items-start text-center md:text-left z-20 order-1 mt-4 md:mt-0">
@@ -210,11 +239,11 @@
         <section id="catalog" class="page bg-[#FAF9F6] flex-1 flex flex-col" style="display: none;">
             <div class="max-w-6xl mx-auto w-full flex flex-col h-full">
                 <div class="px-4 md:px-8 py-4 md:py-6 z-20 sticky top-[55px] md:top-[70px] bg-[#FAF9F6] flex flex-col gap-3 md:gap-5 border-b border-brand-light/50">
-                    <div class="flex flex-row items-center gap-3">
-                        <button onclick="showPage('home')" class="text-[10px] md:text-xs font-bold text-brand-dark uppercase tracking-widest flex items-center hover:text-brand transition w-fit shrink-0">
-                            <i class="fas fa-long-arrow-alt-left mr-2 text-sm"></i> Return
+                    <div class="flex flex-row items-center gap-4">
+                        <button onclick="showPage('home')" class="back-icon-btn" aria-label="Go Back">
+                            <i class="fas fa-chevron-left"></i>
                         </button>
-                        <h2 class="text-2xl md:text-4xl font-display font-bold text-brand-dark m-0 ml-2">Flagship Collection</h2>
+                        <h2 class="text-2xl md:text-4xl font-display font-bold text-brand-dark m-0">Flagship Collection</h2>
                     </div>
                 </div>
 
@@ -237,9 +266,9 @@
 
         <section id="contact" class="page bg-[#FAF9F6] flex-1 flex flex-col" style="display: none;">
             <div class="max-w-4xl mx-auto w-full px-4 md:px-8 py-6 md:py-10 flex flex-col h-full">
-                <div class="flex items-center mb-8">
-                    <button onclick="showPage('home')" class="text-[10px] md:text-xs font-bold text-brand-dark uppercase tracking-widest flex items-center hover:text-brand transition">
-                        <i class="fas fa-long-arrow-alt-left mr-2 text-sm"></i> Back Home
+                <div class="flex items-center mb-6 md:mb-10">
+                    <button onclick="showPage('home')" class="back-icon-btn" aria-label="Go Back">
+                        <i class="fas fa-chevron-left"></i>
                     </button>
                 </div>
                 
@@ -287,9 +316,9 @@
         <section id="product-detail-view" class="page bg-[#FAF9F6] flex-1 flex flex-col" style="display: none;">
             <div class="max-w-5xl mx-auto w-full px-4 md:px-8 py-4 md:py-8 pb-20 flex flex-col h-full">
                 
-                <div class="flex justify-between items-center mb-4 md:mb-8">
-                    <button onclick="showPage('catalog')" class="text-[10px] md:text-xs font-bold text-brand-dark uppercase tracking-widest flex items-center hover:text-brand transition">
-                        <i class="fas fa-long-arrow-alt-left mr-2 text-sm"></i> Back to Collection
+                <div class="flex items-center mb-6 md:mb-8">
+                    <button onclick="showPage('catalog')" class="back-icon-btn" aria-label="Go Back">
+                        <i class="fas fa-chevron-left"></i>
                     </button>
                 </div>
 
@@ -350,7 +379,7 @@
     </main>
 
     <script>
-        // HARDCODED SINGLE FLAGSHIP PRODUCT WITH FULL SPECS
+        // HARDCODED SINGLE FLAGSHIP PRODUCT WITH UPDATED SPECS
         const products = [
             { 
                 id: 1, 
@@ -361,8 +390,7 @@
                 icon: 'fa-shopping-cart', 
                 image_url: 'images/HBB.jpg', 
                 stock: 14,
-                material: 'Premium Vegan Leather',
-                size: '14" W x 11" H x 5" D',
+                material: 'Leather', 
                 usage: 'Everyday carry, office to evening',
                 vibe: 'Effortlessly transition from boardroom meetings to weekend brunches. The CW Tote is designed for the modern individual who refuses to compromise on elegance or utility.',
                 colors: [
@@ -526,7 +554,6 @@
             specsDiv.innerHTML = `
                 <ul class="text-[10px] md:text-xs text-slate-500 space-y-2.5">
                     ${p.material ? `<li><strong class="text-brand-dark uppercase tracking-widest text-[9px]">Material:</strong> <span class="ml-1">${p.material}</span></li>` : ''}
-                    ${p.size ? `<li><strong class="text-brand-dark uppercase tracking-widest text-[9px]">Dimensions:</strong> <span class="ml-1">${p.size}</span></li>` : ''}
                     ${p.usage ? `<li><strong class="text-brand-dark uppercase tracking-widest text-[9px]">Ideal for:</strong> <span class="ml-1">${p.usage}</span></li>` : ''}
                 </ul>
             `;
@@ -623,7 +650,6 @@
             
             localStorage.setItem('ovrlyne_cart', JSON.stringify(cart)); 
             
-            // Re-render UI and explicitly ensure total section visibility
             updateCartUI(); 
             
             showToast(`Added to Cart`); 
@@ -668,11 +694,9 @@
 
             if(cart.length === 0) { 
                 container.innerHTML = '<div class="text-center py-16 text-brand-dark/30"><i class="fas fa-shopping-cart text-4xl mb-4"></i><p class="text-[10px] font-bold uppercase tracking-[0.2em]">Your cart is empty</p></div>'; 
-                // Hide total section if cart is empty
                 totalSection.classList.add('hidden');
                 totalSection.classList.remove('flex');
             } else { 
-                // Show total section if items exist
                 totalSection.classList.remove('hidden');
                 totalSection.classList.add('flex');
 
