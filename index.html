@@ -48,9 +48,6 @@
         .page.active { display: flex; opacity: 1; animation: fadeIn 0.4s ease forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .split-bg { clip-path: polygon(0 0, 100% 0, 100% 85%, 0% 100%); }
-        @media (min-width: 768px) { .split-bg { clip-path: polygon(0 0, 100% 0, 65% 100%, 0% 100%); } }
-
         .cart-badge { position: absolute; top: -4px; right: -6px; background-color: #4A3525; color: white; font-size: 9px; font-weight: 900; height: 16px; width: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; opacity: 0; transform: scale(0); transition: all 0.3s ease; }
         .cart-badge.visible { opacity: 1; transform: scale(1); }
         .cart-pulse { animation: cartPop 0.4s; }
@@ -106,26 +103,28 @@
             <button onclick="clearCart()" class="text-[9px] font-bold text-red-700 bg-red-50 px-3 py-1 border border-red-100 uppercase tracking-widest hover:bg-red-100 transition">Clear Cart</button>
         </div>
 
-        <div id="cart-items-container" class="flex-1 p-4 md:p-6 overflow-y-auto hide-scrollbar flex flex-col gap-3">
-            </div>
-
-        <div class="p-4 md:p-6 border-t border-brand-light bg-white shrink-0 shadow-[0_-4px_20px_rgba(74,53,37,0.03)] z-20 flex flex-col">
-            <div class="flex items-center justify-between gap-4 mb-3">
-                <div class="flex flex-col">
-                    <span class="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Total</span>
+        <div class="flex-1 overflow-y-auto hide-scrollbar flex flex-col">
+            <div id="cart-items-container" class="p-4 md:p-6 flex flex-col gap-3">
+                </div>
+            
+            <div id="cart-total-section" class="px-4 md:px-6 pb-6 hidden flex-col">
+                <div class="flex justify-between items-center border-t border-brand-light pt-4 mt-2">
+                    <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Estimated Total</span>
                     <span id="cart-total" class="text-xl md:text-2xl font-display font-bold text-brand-dark leading-none">KSH 0</span>
                 </div>
-                <button onclick="checkoutCart()" class="flex-1 max-w-[180px] bg-[#25D366] text-white py-3 md:py-3.5 rounded-sm font-bold tracking-[0.1em] uppercase hover:bg-[#20bd5a] transition-all active:scale-95 shadow-md shadow-green-500/20 flex justify-center items-center gap-2 text-[10px]">
-                    <i class="fab fa-whatsapp text-sm"></i> Order Now
-                </button>
             </div>
+        </div>
+
+        <div class="p-4 md:p-6 border-t border-brand-light bg-white shrink-0 shadow-[0_-4px_20px_rgba(74,53,37,0.03)] z-20 flex flex-col">
+            <button onclick="checkoutCart()" class="w-full bg-[#25D366] text-white py-3.5 md:py-4 rounded-sm font-bold tracking-[0.15em] uppercase hover:bg-[#20bd5a] transition-all active:scale-95 shadow-md shadow-green-500/20 flex justify-center items-center gap-2 text-xs md:text-sm">
+                <i class="fab fa-whatsapp text-lg"></i> Checkout
+            </button>
+            <p class="text-[8px] text-slate-400 text-center mt-3 tracking-widest uppercase flex items-center justify-center gap-1.5"><i class="fas fa-lock"></i> Guest Checkout via WhatsApp</p>
             
-            <p class="text-[8px] text-slate-400 text-center mb-3 tracking-widest uppercase flex items-center justify-center gap-1.5"><i class="fas fa-lock"></i> Guest Checkout via WhatsApp</p>
-            
-            <div class="flex flex-row items-center justify-center gap-1.5 pt-3 border-t border-brand-light/30 opacity-50 hover:opacity-100 transition-opacity">
+            <div class="flex flex-row items-center justify-center gap-1.5 pt-4 mt-3 border-t border-brand-light/30 opacity-60 hover:opacity-100 transition-opacity">
                 <a href="https://www.whats-cart.com/" target="_blank" class="flex items-center gap-1.5 group cursor-pointer">
-                    <span class="font-sans text-[7px] text-brand-dark uppercase tracking-widest font-bold m-0 group-hover:text-black transition-colors">POWERED BY</span>
-                    <div class="w-4 h-4 bg-gradient-to-br from-[#4A3525] to-[#1A1412] border-radius-sm flex items-center justify-center rounded-[3px] shadow-sm group-hover:scale-110 transition-transform"><i class="fas fa-shopping-cart text-white text-[6px]"></i></div>
+                    <span class="font-sans text-[8px] text-brand-dark uppercase tracking-widest font-bold m-0 group-hover:text-black transition-colors">POWERED BY</span>
+                    <div class="w-5 h-5 bg-gradient-to-br from-[#4A3525] to-[#1A1412] border-radius-sm flex items-center justify-center rounded-[3px] shadow-sm group-hover:scale-110 transition-transform"><i class="fas fa-shopping-cart text-white text-[8px]"></i></div>
                 </a>
             </div>
         </div>
@@ -178,9 +177,7 @@
             </div>
         </section>
         
-        <section id="home" class="page bg-charcoal flex-1 flex flex-col relative overflow-hidden" style="display: none; padding-top: 0;">
-            <div class="absolute inset-0 bg-camel z-0 split-bg transition-transform duration-700"></div>
-
+        <section id="home" class="page bg-camel flex-1 flex flex-col relative overflow-hidden" style="display: none; padding-top: 0;">
             <div class="max-w-7xl mx-auto w-full flex-1 flex flex-col md:flex-row items-center justify-center relative z-10 px-6 md:px-12 pt-[80px] md:pt-[100px] pb-16 min-h-screen">
                 
                 <div class="w-full md:w-1/2 flex flex-col items-center md:items-start text-center md:text-left z-20 order-1 mt-4 md:mt-0">
@@ -193,7 +190,7 @@
                     </h2>
                     <h3 class="text-xl md:text-4xl font-sans font-bold text-charcoal opacity-80 uppercase tracking-widest mb-4 md:mb-10">COLLECTION</h3>
                     
-                    <button onclick="showPage('catalog')" class="hidden md:block border-2 border-charcoal text-charcoal rounded-full px-8 py-3 text-xs font-bold uppercase tracking-[0.2em] hover:bg-charcoal hover:text-camel transition-colors duration-300">
+                    <button onclick="showPage('catalog')" class="hidden md:block border-2 border-charcoal text-charcoal rounded-full px-8 py-3 text-xs font-bold uppercase tracking-[0.2em] hover:bg-charcoal hover:text-[#F3EFEA] transition-colors duration-300">
                         Shop Now
                     </button>
                 </div>
@@ -203,7 +200,7 @@
                 </div>
 
                 <div class="w-full flex justify-center z-20 order-3 md:hidden mt-2">
-                    <button onclick="showPage('catalog')" class="border-2 border-charcoal text-charcoal rounded-full px-10 py-3 text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-charcoal hover:text-camel transition-colors duration-300">
+                    <button onclick="showPage('catalog')" class="border-2 border-charcoal text-charcoal rounded-full px-10 py-3 text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-charcoal hover:text-[#F3EFEA] transition-colors duration-300">
                         Shop Now
                     </button>
                 </div>
@@ -263,7 +260,7 @@
                                 <p class="text-[9px] md:text-[10px] text-slate-500 mt-1 leading-relaxed">Dynamic Mall 2nd Floor ML 82,<br>Tom Mboya St, Nairobi</p>
                             </div>
                         </div>
-                        <a href="https://maps.google.com/?q=Dynamic+Mall,+Tom+Mboya+St,+Nairobi" target="_blank" class="text-[8px] md:text-[9px] font-bold text-brand-dark border border-brand-light px-3 py-2 uppercase tracking-[0.15em] hover:bg-brand-dark hover:text-white transition shrink-0 whitespace-nowrap">
+                        <a href="https://www.google.com/maps/dir/?api=1&destination=Dynamic+Mall,+Tom+Mboya+Street,+Nairobi" target="_blank" class="text-[8px] md:text-[9px] font-bold text-brand-dark border border-brand-light px-3 py-2 uppercase tracking-[0.15em] hover:bg-brand-dark hover:text-white transition shrink-0 whitespace-nowrap">
                             Directions
                         </a>
                     </div>
@@ -625,6 +622,8 @@
             }
             
             localStorage.setItem('ovrlyne_cart', JSON.stringify(cart)); 
+            
+            // Re-render UI and explicitly ensure total section visibility
             updateCartUI(); 
             
             showToast(`Added to Cart`); 
@@ -663,10 +662,20 @@
             document.getElementById('cart-count-header').innerText = '(' + totalQty + ')'; 
             
             const container = document.getElementById('cart-items-container'); 
+            const totalSection = document.getElementById('cart-total-section');
+
             container.innerHTML = ''; let totalKsh = 0; 
+
             if(cart.length === 0) { 
                 container.innerHTML = '<div class="text-center py-16 text-brand-dark/30"><i class="fas fa-shopping-cart text-4xl mb-4"></i><p class="text-[10px] font-bold uppercase tracking-[0.2em]">Your cart is empty</p></div>'; 
+                // Hide total section if cart is empty
+                totalSection.classList.add('hidden');
+                totalSection.classList.remove('flex');
             } else { 
+                // Show total section if items exist
+                totalSection.classList.remove('hidden');
+                totalSection.classList.add('flex');
+
                 cart.forEach(item => { 
                     totalKsh += (item.price * item.qty); 
                     const imgThumb = item.image_url 
