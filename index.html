@@ -48,6 +48,9 @@
         .page.active { display: flex; opacity: 1; animation: fadeIn 0.4s ease forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+        .split-bg { clip-path: polygon(0 0, 100% 0, 100% 85%, 0% 100%); }
+        @media (min-width: 768px) { .split-bg { clip-path: polygon(0 0, 100% 0, 65% 100%, 0% 100%); } }
+
         .cart-badge { position: absolute; top: -4px; right: -6px; background-color: #4A3525; color: white; font-size: 9px; font-weight: 900; height: 16px; width: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; opacity: 0; transform: scale(0); transition: all 0.3s ease; }
         .cart-badge.visible { opacity: 1; transform: scale(1); }
         .cart-pulse { animation: cartPop 0.4s; }
@@ -106,15 +109,25 @@
         <div id="cart-items-container" class="flex-1 p-4 md:p-6 overflow-y-auto hide-scrollbar flex flex-col gap-3">
             </div>
 
-        <div class="p-6 border-t border-brand-light bg-white shrink-0 shadow-[0_-4px_20px_rgba(74,53,37,0.03)]">
-            <div class="flex justify-between font-display font-bold text-xl mb-4 text-brand-dark">
-                <span>Estimated Total</span>
-                <span id="cart-total">KSH 0</span>
+        <div class="p-4 md:p-6 border-t border-brand-light bg-white shrink-0 shadow-[0_-4px_20px_rgba(74,53,37,0.03)] z-20 flex flex-col">
+            <div class="flex items-center justify-between gap-4 mb-3">
+                <div class="flex flex-col">
+                    <span class="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Total</span>
+                    <span id="cart-total" class="text-xl md:text-2xl font-display font-bold text-brand-dark leading-none">KSH 0</span>
+                </div>
+                <button onclick="checkoutCart()" class="flex-1 max-w-[180px] bg-[#25D366] text-white py-3 md:py-3.5 rounded-sm font-bold tracking-[0.1em] uppercase hover:bg-[#20bd5a] transition-all active:scale-95 shadow-md shadow-green-500/20 flex justify-center items-center gap-2 text-[10px]">
+                    <i class="fab fa-whatsapp text-sm"></i> Order Now
+                </button>
             </div>
-            <button onclick="checkoutCart()" class="w-full bg-[#25D366] text-white py-4 rounded-sm font-bold tracking-[0.2em] uppercase hover:bg-[#20bd5a] transition-all active:scale-95 shadow-lg shadow-green-500/20 flex justify-center items-center gap-3 text-xs">
-                <i class="fab fa-whatsapp text-lg"></i> CHECKOUT
-            </button>
-            <p class="text-[9px] text-slate-400 text-center mt-3 tracking-widest uppercase flex items-center justify-center gap-1.5"><i class="fas fa-lock"></i> Guest Checkout via WhatsApp</p>
+            
+            <p class="text-[8px] text-slate-400 text-center mb-3 tracking-widest uppercase flex items-center justify-center gap-1.5"><i class="fas fa-lock"></i> Guest Checkout via WhatsApp</p>
+            
+            <div class="flex flex-row items-center justify-center gap-1.5 pt-3 border-t border-brand-light/30 opacity-50 hover:opacity-100 transition-opacity">
+                <a href="https://www.whats-cart.com/" target="_blank" class="flex items-center gap-1.5 group cursor-pointer">
+                    <span class="font-sans text-[7px] text-brand-dark uppercase tracking-widest font-bold m-0 group-hover:text-black transition-colors">POWERED BY</span>
+                    <div class="w-4 h-4 bg-gradient-to-br from-[#4A3525] to-[#1A1412] border-radius-sm flex items-center justify-center rounded-[3px] shadow-sm group-hover:scale-110 transition-transform"><i class="fas fa-shopping-cart text-white text-[6px]"></i></div>
+                </a>
+            </div>
         </div>
     </div>
 
@@ -165,7 +178,9 @@
             </div>
         </section>
         
-        <section id="home" class="page bg-camel flex-1 flex flex-col relative overflow-hidden" style="display: none; padding-top: 0;">
+        <section id="home" class="page bg-charcoal flex-1 flex flex-col relative overflow-hidden" style="display: none; padding-top: 0;">
+            <div class="absolute inset-0 bg-camel z-0 split-bg transition-transform duration-700"></div>
+
             <div class="max-w-7xl mx-auto w-full flex-1 flex flex-col md:flex-row items-center justify-center relative z-10 px-6 md:px-12 pt-[80px] md:pt-[100px] pb-16 min-h-screen">
                 
                 <div class="w-full md:w-1/2 flex flex-col items-center md:items-start text-center md:text-left z-20 order-1 mt-4 md:mt-0">
@@ -225,36 +240,49 @@
 
         <section id="contact" class="page bg-[#FAF9F6] flex-1 flex flex-col" style="display: none;">
             <div class="max-w-4xl mx-auto w-full px-4 md:px-8 py-6 md:py-10 flex flex-col h-full">
-                <div class="flex items-center mb-8 md:mb-12">
+                <div class="flex items-center mb-8">
                     <button onclick="showPage('home')" class="text-[10px] md:text-xs font-bold text-brand-dark uppercase tracking-widest flex items-center hover:text-brand transition">
                         <i class="fas fa-long-arrow-alt-left mr-2 text-sm"></i> Back Home
                     </button>
                 </div>
                 
-                <div class="text-center mb-10">
-                    <h2 class="text-3xl md:text-5xl font-display font-bold text-brand-dark mb-4">Get in Touch</h2>
-                    <p class="text-xs md:text-sm text-slate-600 font-light max-w-md mx-auto">Visit our boutique in Nairobi or reach out directly for bespoke requests and inquiries.</p>
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl md:text-4xl font-display font-bold text-brand-dark mb-3">Get in Touch</h2>
+                    <p class="text-[11px] md:text-xs text-slate-600 font-light max-w-sm mx-auto leading-relaxed">Visit our boutique in Nairobi or reach out directly for bespoke requests and inquiries.</p>
                 </div>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto w-full">
-                    <div class="bg-white p-8 md:p-10 border border-brand-light flex flex-col items-center text-center shadow-sm">
-                        <div class="w-14 h-14 bg-brand-light/30 rounded-full flex items-center justify-center mb-6">
-                            <i class="fas fa-map-marker-alt text-brand text-2xl"></i>
+                <div class="flex flex-col gap-4 max-w-lg mx-auto w-full">
+                    
+                    <div class="bg-white p-4 md:p-5 border border-brand-light flex items-center justify-between shadow-sm rounded-sm hover:border-brand/40 transition-colors">
+                        <div class="flex items-center gap-4 pr-4">
+                            <div class="w-10 h-10 bg-brand-light/30 rounded-full flex items-center justify-center shrink-0">
+                                <i class="fas fa-map-marker-alt text-brand text-lg"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-display font-bold text-sm md:text-base text-brand-dark leading-tight">Boutique Location</h3>
+                                <p class="text-[9px] md:text-[10px] text-slate-500 mt-1 leading-relaxed">Dynamic Mall 2nd Floor ML 82,<br>Tom Mboya St, Nairobi</p>
+                            </div>
                         </div>
-                        <h3 class="font-display font-bold text-xl text-brand-dark mb-3">Boutique Location</h3>
-                        <p class="text-xs text-slate-600 leading-loose font-light mb-8">Dynamic Mall 2nd Floor ML 82,<br>Opposite Ambassadeur,<br>Tom Mboya St, Nairobi</p>
-                        <a href="https://www.google.com/maps/dir/?api=1&destination=Dynamic+Mall,+Tom+Mboya+St,+Nairobi" target="_blank" class="mt-auto w-full text-[10px] font-bold text-brand-dark border border-brand-dark px-6 py-3 uppercase tracking-widest hover:bg-brand-dark hover:text-white transition">Get Directions</a>
+                        <a href="https://maps.google.com/?q=Dynamic+Mall,+Tom+Mboya+St,+Nairobi" target="_blank" class="text-[8px] md:text-[9px] font-bold text-brand-dark border border-brand-light px-3 py-2 uppercase tracking-[0.15em] hover:bg-brand-dark hover:text-white transition shrink-0 whitespace-nowrap">
+                            Directions
+                        </a>
                     </div>
                     
-                    <div class="bg-white p-8 md:p-10 border border-brand-light flex flex-col items-center text-center shadow-sm">
-                        <div class="w-14 h-14 bg-brand-light/30 rounded-full flex items-center justify-center mb-6">
-                            <i class="fas fa-phone-alt text-brand text-2xl"></i>
+                    <div class="bg-white p-4 md:p-5 border border-brand-light flex items-center justify-between shadow-sm rounded-sm hover:border-brand/40 transition-colors">
+                        <div class="flex items-center gap-4 pr-4">
+                            <div class="w-10 h-10 bg-brand-light/30 rounded-full flex items-center justify-center shrink-0">
+                                <i class="fas fa-phone-alt text-brand text-base"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-display font-bold text-sm md:text-base text-brand-dark leading-tight">Direct Line</h3>
+                                <p class="text-[9px] md:text-[10px] text-slate-500 mt-1 leading-relaxed">Secure your piece today.<br>0795 896 980</p>
+                            </div>
                         </div>
-                        <h3 class="font-display font-bold text-xl text-brand-dark mb-3">Direct Line</h3>
-                        <p class="text-xs text-slate-600 leading-loose font-light mb-6">Call or message us directly on WhatsApp to secure your piece today.</p>
-                        <p class="text-xl font-display font-bold text-brand-dark mb-8">0795 896 980</p>
-                        <a href="tel:0795896980" class="mt-auto w-full text-[10px] font-bold text-brand-dark border border-brand-dark px-6 py-3 uppercase tracking-widest hover:bg-brand-dark hover:text-white transition">Call Now</a>
+                        <a href="tel:0795896980" class="text-[8px] md:text-[9px] font-bold text-brand-dark border border-brand-light px-5 py-2 uppercase tracking-[0.15em] hover:bg-brand-dark hover:text-white transition shrink-0 whitespace-nowrap text-center">
+                            Call Now
+                        </a>
                     </div>
+
                 </div>
             </div>
         </section>
