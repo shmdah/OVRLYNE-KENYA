@@ -30,7 +30,8 @@
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background-color: #FAF9F6; color: #1A1412; overflow-x: hidden; }
+        /* Forced min-height to ensure the footer always sticks to the bottom */
+        body { background-color: #FAF9F6; color: #1A1412; overflow-x: hidden; min-height: 100dvh; display: flex; flex-direction: column; }
         
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         ::-webkit-scrollbar { width: 4px; height: 4px; display: none; }
@@ -49,19 +50,15 @@
         .cart-pulse { animation: cartPop 0.4s; }
         @keyframes cartPop { 0% { transform: scale(1); } 50% { transform: scale(1.4); } 100% { transform: scale(1); } }
 
-        .melon-card { position: relative; border-radius: 12px; padding: 12px 16px; height: 110px; display: flex; flex-direction: column; justify-content: center; overflow: visible; cursor: pointer; border: 1px solid rgba(255,255,255,0.2); margin-bottom: 8px; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease; }
+        .melon-card { position: relative; border-radius: 12px; padding: 12px 16px; height: 95px; display: flex; flex-direction: column; justify-content: center; overflow: visible; cursor: pointer; border: 1px solid rgba(255,255,255,0.2); margin-bottom: 8px; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease; }
         .melon-card.bg-bags { background: linear-gradient(135deg, #A67B5B, #6B4423); }
-        .melon-card.bg-backpacks { background: linear-gradient(135deg, #8C6239, #4A3525); }
-        .melon-card.bg-classic { background: linear-gradient(135deg, #D2B48C, #A67B5B); }
         
-        .melon-icon-pop { position: absolute; right: 5%; top: 50%; transform: translateY(-50%); font-size: 5rem; color: rgba(255,255,255,0.4); z-index: 10; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), right 0.4s ease; pointer-events: none;}
-        .melon-img { position: absolute; right: 2%; top: 50%; transform: translateY(-50%); height: 150%; object-fit: contain; z-index: 10; pointer-events: none; filter: drop-shadow(-10px 15px 15px rgba(74, 53, 37, 0.4)); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), right 0.4s ease; }
+        .melon-img { position: absolute; right: 2%; top: 50%; transform: translateY(-50%); height: 130%; object-fit: contain; z-index: 10; pointer-events: none; filter: drop-shadow(-10px 15px 15px rgba(74, 53, 37, 0.4)); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), right 0.4s ease; }
 
         @media (min-width: 768px) {
             .melon-card { border-radius: 16px; height: 160px; margin-bottom: 0; padding: 24px; }
-            .melon-icon-pop { font-size: 7rem; right: 8%; }
+            .melon-img { height: 150%; }
             .melon-card:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 15px 30px rgba(74, 53, 37, 0.2); z-index: 20; }
-            .melon-card:hover .melon-icon-pop { transform: translateY(-50%) scale(1.15) rotate(-5deg); right: 2%; color: rgba(255,255,255,0.6); }
             .melon-card:hover .melon-img { transform: translateY(-50%) scale(1.15) rotate(-3deg); right: -2%; }
         }
         .melon-force-hover { transform: translateY(-4px) scale(1.02) !important; box-shadow: 0 10px 20px rgba(74, 53, 37, 0.2) !important; z-index: 20; }
@@ -91,15 +88,13 @@
         .rounded-xl { border-radius: 4px !important; }
         .rounded-2xl, .rounded-[2rem] { border-radius: 8px !important; }
 
-        /* Custom Color Swatch Styling */
         .color-swatch { width: 28px; height: 28px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: all 0.2s ease; outline: 2px solid transparent; outline-offset: 2px; }
         .color-swatch.active { border-color: white; outline-color: #4A3525; transform: scale(1.1); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
-        /* VINES Feature: The Secret Orange Outline */
         .vines { border: 1.5px solid #f97316 !important; }
     </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col">
 
     <div id="toast"><i class="fas fa-check text-brand-dark"></i> <span id="toast-msg">Added to Cart</span></div>
     
@@ -155,19 +150,35 @@
     <div id="mobile-menu-overlay" class="fixed inset-0 bg-brand-dark/40 backdrop-blur-sm z-[105] opacity-0 pointer-events-none transition-opacity duration-300 md:hidden" onclick="toggleMobileMenu()"></div>
     <div id="mobile-menu" class="fixed top-0 right-0 translate-x-full w-[70%] h-full z-[110] bg-beige-50 shadow-2xl flex flex-col py-8 px-6 transition-transform duration-300 ease-in-out border-l border-brand-light md:hidden">
         <h2 class="font-display font-bold text-2xl text-brand-dark mb-8">OVRLYNE</h2>
+        
         <div class="flex flex-col items-start space-y-6 text-sm font-medium uppercase tracking-widest w-full text-brand-dark">
             <button onclick="navigateFromMenu('home')" class="hover:text-brand text-left w-full border-b border-brand-light pb-2">Home</button>
             <button onclick="navigateFromMenu('catalog')" class="hover:text-brand text-left w-full border-b border-brand-light pb-2">Collection</button>
             <button onclick="toggleHoneyCart(); toggleMobileMenu();" class="hover:text-brand text-left w-full flex items-center gap-2"><i class="fas fa-shopping-cart"></i> My Cart</button>
         </div>
+        
+        <div class="mt-8 border-t border-brand-light pt-6 w-full">
+            <h3 class="text-[9px] font-bold text-brand uppercase tracking-[0.2em] mb-4">Get in Touch</h3>
+            <div class="flex gap-3 w-full">
+                <a href="https://maps.google.com/?q=Dynamic+Mall+Tom+Mboya+Street+Nairobi" target="_blank" class="flex-1 flex flex-col items-center justify-center gap-2 bg-white border border-brand-light p-3 rounded-sm shadow-sm hover:border-brand transition group text-brand-dark">
+                    <i class="fas fa-map-marker-alt text-brand text-lg group-hover:scale-110 transition-transform"></i>
+                    <span class="text-[8px] font-bold uppercase tracking-widest">Location</span>
+                </a>
+                <a href="tel:0795896980" class="flex-1 flex flex-col items-center justify-center gap-2 bg-white border border-brand-light p-3 rounded-sm shadow-sm hover:border-brand transition group text-brand-dark">
+                    <i class="fas fa-phone-alt text-brand text-lg group-hover:scale-110 transition-transform"></i>
+                    <span class="text-[8px] font-bold uppercase tracking-widest">Call Us</span>
+                </a>
+            </div>
+        </div>
+
         <div class="mt-auto flex flex-col items-start gap-5 w-full">
             <button onclick="toggleMobileMenu()" class="text-[10px] text-brand-dark border border-brand-dark px-6 py-3 font-bold w-full text-center hover:bg-brand-dark hover:text-white transition uppercase tracking-widest">Close Menu</button>
         </div>
     </div>
 
-    <main class="z-10 relative flex-1 flex flex-col">
+    <main class="z-10 relative flex-1 flex flex-col w-full">
         
-        <section id="home" class="page active bg-[#FAF9F6] pt-[60px] md:pt-[90px]">
+        <section id="home" class="page active bg-[#FAF9F6] pt-[60px] md:pt-[90px] flex-1 flex flex-col">
             <div class="absolute top-0 right-0 w-[400px] h-[400px] bg-gradient-to-br from-brand-light to-brand rounded-full blur-[120px] opacity-20 -z-10 translate-x-1/3 -translate-y-1/4 pointer-events-none"></div>
 
             <div class="max-w-5xl mx-auto w-full px-4 md:px-8 py-6 md:py-16">
@@ -181,34 +192,18 @@
                     <p class="text-slate-600 font-light text-xs md:text-base mt-4 max-w-md mx-auto leading-relaxed">Discover our curated collection of premium handbags and backpacks, designed for the modern aesthetic.</p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 w-full px-2 md:px-0">
-                    <div onclick="handleMelonTap('Handbag', this)" class="melon-card bg-bags tilt-card group">
+                <div class="flex justify-center w-full px-2 md:px-0">
+                    <div onclick="handleMelonTap('Handbag', this)" class="melon-card bg-bags tilt-card group w-full md:w-1/3 max-w-sm">
                         <div class="relative z-10 w-[65%] md:w-2/3">
-                            <h3 class="text-xl md:text-3xl font-display font-bold text-white mb-2">Handbags</h3>
+                            <h3 class="text-lg md:text-3xl font-display font-bold text-white mb-2">Handbags</h3>
                             <span class="text-[9px] md:text-[11px] font-medium text-white/80 group-hover:text-white transition flex items-center gap-1 uppercase tracking-widest">Explore <i class="fas fa-long-arrow-alt-right"></i></span>
                         </div>
                         <img src="images/HBhm.png" alt="Handbags" class="melon-img">
                     </div>
-                    
-                    <div onclick="handleMelonTap('Backpack', this)" class="melon-card bg-backpacks tilt-card group">
-                        <div class="relative z-10 w-[65%] md:w-2/3">
-                            <h3 class="text-xl md:text-3xl font-display font-bold text-white mb-2">Backpacks</h3>
-                            <span class="text-[9px] md:text-[11px] font-medium text-white/80 group-hover:text-white transition flex items-center gap-1 uppercase tracking-widest">Explore <i class="fas fa-long-arrow-alt-right"></i></span>
-                        </div>
-                        <i class="fas fa-briefcase melon-icon-pop"></i>
-                    </div>
-                    
-                    <div onclick="handleMelonTap('all', this)" class="melon-card bg-classic tilt-card group">
-                        <div class="relative z-10 w-[65%] md:w-2/3">
-                            <h3 class="text-xl md:text-3xl font-display font-bold text-white mb-2">The Full<br>Collection</h3>
-                            <span class="text-[9px] md:text-[11px] font-medium text-white/80 group-hover:text-white transition flex items-center gap-1 uppercase tracking-widest">View All <i class="fas fa-long-arrow-alt-right"></i></span>
-                        </div>
-                        <i class="fas fa-gem melon-icon-pop"></i>
-                    </div>
                 </div>
             </div>
             
-            <footer class="bg-beige-100 relative overflow-hidden pt-20 pb-10 mt-auto border-t-8 border-brand">
+            <footer class="bg-beige-100 relative overflow-hidden pt-12 pb-8 mt-auto flex-shrink-0">
                 <div class="absolute top-[-1px] left-0 w-full overflow-hidden leading-none text-brand">
                     <svg class="relative block w-[calc(138%+1.3px)] h-[40px]" viewBox="0 0 1200 120" preserveAspectRatio="none">
                         <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" class="fill-current"></path>
@@ -217,14 +212,9 @@
                     </svg>
                 </div>
 
-                <div class="max-w-6xl mx-auto px-6 text-center z-10 relative">
-                    <h4 class="font-display text-2xl md:text-3xl font-bold tracking-widest text-brand-dark mb-4">OVRLYNE.</h4>
-                    <p class="text-[10px] md:text-xs text-brand-dark/70 font-medium tracking-widest uppercase mb-8 text-center">
-                        <i class="fas fa-map-marker-alt text-brand mr-1"></i> Dynamic Mall 2nd Floor ML 82, Opp Ambassadeur, Tom Mboya St.
-                    </p>
-                    
-                    <div class="wc-brand-footer pt-8 border-t border-brand-light">
-                        <a href="https://www.whats-cart.com/" target="_blank" class="flex flex-row items-center justify-center gap-2 transition-opacity hover:opacity-100 opacity-60 group">
+                <div class="max-w-6xl mx-auto px-6 text-center z-10 relative pt-8">
+                    <div class="flex flex-row items-center justify-center gap-2 transition-opacity hover:opacity-100 opacity-60 group">
+                        <a href="https://www.whats-cart.com/" target="_blank" class="flex flex-row items-center justify-center gap-2">
                             <span class="wc-brand-text m-0 group-hover:text-slate-800 transition-colors">POWERED BY</span>
                             <div class="wc-brand-icon group-hover:scale-110 transition-transform"><i class="fas fa-shopping-cart text-white"></i></div>
                         </a>
@@ -233,7 +223,7 @@
             </footer>
         </section>
 
-        <section id="catalog" class="page bg-[#FAF9F6]">
+        <section id="catalog" class="page bg-[#FAF9F6] flex-1 flex flex-col">
             <div class="max-w-6xl mx-auto w-full flex flex-col h-full">
                 <div class="px-4 md:px-8 py-4 md:py-6 z-20 sticky top-[55px] md:top-[70px] bg-[#FAF9F6] flex flex-col gap-3 md:gap-5 border-b border-brand-light/50">
                     <div class="flex flex-row items-center gap-3">
@@ -255,9 +245,6 @@
                             </div>
                         
                         <div class="w-full flex flex-col items-center py-6 mt-auto border-t border-brand-light/50">
-                            <p class="text-[9px] md:text-[10px] text-brand-dark/70 font-medium tracking-widest uppercase mb-3 text-center px-4">
-                                Dynamic Mall 2nd Floor ML 82, Opp Ambassadeur
-                            </p>
                             <a href="https://www.whats-cart.com/" target="_blank" class="flex flex-row items-center justify-center gap-2 opacity-60 hover:opacity-100 transition">
                                 <span class="wc-brand-text m-0">POWERED BY</span>
                                 <div class="wc-brand-icon"><i class="fas fa-shopping-cart text-white"></i></div>
@@ -268,7 +255,7 @@
             </div>
         </section>
 
-        <section id="product-detail-view" class="page bg-[#FAF9F6]">
+        <section id="product-detail-view" class="page bg-[#FAF9F6] flex-1 flex flex-col">
             <div class="max-w-5xl mx-auto w-full px-4 md:px-8 py-4 md:py-8 pb-20 flex flex-col h-full">
                 
                 <div class="flex justify-between items-center mb-4 md:mb-8">
@@ -280,17 +267,17 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 flex-1">
                     
                     <div class="flex flex-col gap-4">
-                        <div id="main-image-container" class="flex justify-center items-center aspect-square w-full relative bg-white p-0 overflow-hidden shadow-sm border border-brand-light group vines">
+                        <div id="main-image-container" class="flex justify-center items-center w-[75%] mx-auto md:w-full max-w-md aspect-square relative bg-white p-2 md:p-0 overflow-hidden shadow-sm border border-brand-light group vines">
                             
                             <i id="detail-icon" class="fas fa-shopping-cart text-6xl md:text-8xl text-brand-light transition-transform duration-500 hidden"></i>
                             <img id="detail-main-img" class="hidden w-full h-full object-cover fade-img opacity-100">
                             
-                            <button id="slide-left" onclick="changeSlide(-1)" class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 backdrop-blur shadow border border-brand-light flex items-center justify-center text-brand-dark hover:bg-brand-dark hover:text-white transition-colors hidden z-10">
-                                <i class="fas fa-chevron-left text-sm ml-[-2px]"></i>
+                            <button id="slide-left" onclick="changeSlide(-1)" class="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 md:w-10 md:h-10 bg-white/90 backdrop-blur shadow border border-brand-light flex items-center justify-center text-brand-dark hover:bg-brand-dark hover:text-white transition-colors hidden z-10">
+                                <i class="fas fa-chevron-left text-xs md:text-sm ml-[-2px]"></i>
                             </button>
                             
-                            <button id="slide-right" onclick="changeSlide(1)" class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 backdrop-blur shadow border border-brand-light flex items-center justify-center text-brand-dark hover:bg-brand-dark hover:text-white transition-colors hidden z-10">
-                                <i class="fas fa-chevron-right text-sm mr-[-2px]"></i>
+                            <button id="slide-right" onclick="changeSlide(1)" class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 md:w-10 md:h-10 bg-white/90 backdrop-blur shadow border border-brand-light flex items-center justify-center text-brand-dark hover:bg-brand-dark hover:text-white transition-colors hidden z-10">
+                                <i class="fas fa-chevron-right text-xs md:text-sm mr-[-2px]"></i>
                             </button>
                             
                             <div id="slide-dots" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 hidden z-10 bg-white/50 px-3 py-2 backdrop-blur-md border border-white/20">
@@ -457,10 +444,9 @@
                     ? `<img src="${displayImg}" class="w-full h-full object-cover">`
                     : `<i class="fas ${p.icon} text-3xl md:text-5xl text-brand/40 transition-transform duration-500 group-hover:scale-110 group-hover:text-brand"></i>`;
 
-                // Applied "vines" feature class to the image container
                 container.innerHTML += `
                     <div class="food-card flex flex-col items-center text-center cursor-pointer relative group" onclick="selectProduct(${index})">
-                        <div class="w-full aspect-square mt-1 mb-3 overflow-hidden bg-white p-0 flex items-center justify-center transition-all duration-300 shadow-sm relative vines">
+                        <div class="w-full aspect-square mt-1 mb-2 overflow-hidden bg-white p-3 md:p-0 flex items-center justify-center transition-all duration-300 shadow-sm relative vines">
                             ${imageHTML}
                         </div>
                         <p class="text-[8px] md:text-[9px] font-bold text-brand uppercase tracking-[0.2em] mb-1">${p.type}</p>
@@ -481,7 +467,6 @@
             }); 
         }
 
-        // --- PRODUCT DETAILS LOGIC (WITH COLOR SELECTORS) ---
         function selectProduct(index) {
             const p = products[index];
             currentSelection.product = p;
@@ -635,12 +620,12 @@
                     container.innerHTML += `
                     <div class="bg-white p-3 md:p-4 border border-brand-light flex items-center justify-between shadow-sm">
                         <div class="flex items-center gap-4 w-full pr-4">
-                            <div class="w-12 h-12 overflow-hidden bg-brand-light/30 flex items-center justify-center shrink-0 vines">
+                            <div class="w-10 h-10 overflow-hidden bg-brand-light/30 flex items-center justify-center shrink-0 border border-brand-light vines">
                                 ${imgThumb}
                             </div>
                             <div class="flex-1">
                                 <h4 class="font-display font-bold text-[11px] md:text-[13px] text-brand-dark mb-1">${item.name} ${colorLabel}</h4>
-                                <p class="text-[10px] font-light text-slate-600 mb-2 tracking-wide">KSH ${(item.price * item.qty).toLocaleString()}</p>
+                                <p class="text-[9px] font-light text-slate-600 mb-2 tracking-wide">KSH ${(item.price * item.qty).toLocaleString()}</p>
                                 <div class="flex items-center gap-2 bg-beige-50 w-fit px-2 py-1 border border-brand-light">
                                     <button onclick="updateCartQty('${item.cartId}', -1)" class="w-4 h-4 text-brand-dark/60 hover:text-brand-dark flex items-center justify-center"><i class="fas fa-minus text-[8px]"></i></button>
                                     <span class="text-[10px] font-bold w-4 text-center text-brand-dark">${item.qty}</span>
